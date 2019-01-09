@@ -25,6 +25,26 @@ public class Smartlook
         }
     }
 
+    [DllImport("__Internal")]
+    private static extern void SmartlookUnityBridgeInitWithVideoSettings(string key, int targetHeight, int framerate, int bitrate);
+
+    public static void Init(string key, int targetHeight, int framerate, int bitrate)
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            
+        }
+        else
+        {
+            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
+            object[] parameters = new object[3];
+            parameters[0] = key;
+            parameters[1] = framerate;
+            parameters[2] = bitrate;
+            bridge.CallStatic("init", parameters);
+        }
+    }
+
 
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeRecordEvent(string eventName);
