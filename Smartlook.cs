@@ -58,8 +58,25 @@ public class Smartlook
         else
         {
             AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
+            object[] parameters = new object[1];
+            parameters[0] = eventName;
+            bridge.CallStatic("track", parameters);
+        }
+    }
+
+
+    public static void RecordEvent(string eventName, string properties)
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            
+        }
+        else
+        {
+            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
             object[] parameters = new object[2];
             parameters[0] = eventName;
+            parameters[1] = properties;
             bridge.CallStatic("track", parameters);
         }
     }
