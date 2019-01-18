@@ -6,10 +6,12 @@ using System.Runtime.InteropServices;
 
 public class Smartlook
 {
+    public static AndroidJavaClass SL = null;
+
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeInit(string key);
 
-    public static void Init(string key, int fps)
+    public static void Init(string key)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
@@ -17,31 +19,27 @@ public class Smartlook
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
-            object[] parameters = new object[2];
+            object[] parameters = new object[1];
             parameters[0] = key;
-            parameters[1] = fps;
-            bridge.CallStatic("init", parameters);
+            getSLClass().CallStatic("init", parameters);
         }
     }
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeInitWithVideoSettings(string key, int targetHeight, int framerate, int bitrate);
+    private static extern void SmartlookUnityBridgeInitWithFramerate(string key, int framerate);
 
-    public static void Init(string key, int targetHeight, int framerate, int bitrate)
+    public static void Init(string key, int framerate)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            
+            SmartlookUnityBridgeInitWithFramerate(key, framerate);
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
-            object[] parameters = new object[3];
+            object[] parameters = new object[2];
             parameters[0] = key;
             parameters[1] = framerate;
-            parameters[2] = bitrate;
-            bridge.CallStatic("init", parameters);
+            getSLClass().CallStatic("init", parameters);
         }
     }
 
@@ -57,30 +55,44 @@ public class Smartlook
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
             object[] parameters = new object[1];
             parameters[0] = eventName;
-            bridge.CallStatic("track", parameters);
+            getSLClass().CallStatic("track", parameters);
         }
     }
 
+
+    [DllImport("__Internal")]
+    private static extern void SmartlookUnityBridgeRecordEventWithProperties(string eventName, string properties);
 
     public static void RecordEvent(string eventName, string properties)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            
+            SmartlookUnityBridgeRecordEventWithProperties(eventName, properties);
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
             object[] parameters = new object[2];
             parameters[0] = eventName;
             parameters[1] = properties;
-            bridge.CallStatic("track", parameters);
+            getSLClass().CallStatic("track", parameters);
         }
     }
 
+    public static void TimeEvent(string eventName)
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+
+        }
+        else
+        {
+            object[] parameters = new object[1];
+            parameters[0] = eventName;
+            getSLClass().CallStatic("timeEvent", parameters);
+        }
+    }
 
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeSetUserIdentifier(string userIdentifier);
@@ -93,10 +105,9 @@ public class Smartlook
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
-            object[] parameters = new object[2];
+            object[] parameters = new object[1];
             parameters[0] = userIdentifier;
-            bridge.CallStatic("identify", parameters);
+            getSLClass().CallStatic("identify", parameters);
         }
     }
 
@@ -112,8 +123,7 @@ public class Smartlook
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
-            bridge.CallStatic("pause");
+            getSLClass().CallStatic("pause");
         }
     }
 
@@ -129,20 +139,16 @@ public class Smartlook
         }
         else
         {
-            AndroidJavaClass bridge = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
-            bridge.CallStatic("start");
+            getSLClass().CallStatic("start");
         }
     }
 
-
-    [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeConsoleLog(string log);
-
-    public static void Log(string log)
+    private static AndroidJavaClass getSLClass()
     {
-        if (Application.platform == RuntimePlatform.IPhonePlayer)
-        {
-            SmartlookUnityBridgeConsoleLog(log);
+        if (Smartlook.SL != null) {
+            return Smartlook.SL;
         }
+        Smartlook.SL = new AndroidJavaClass("com.smartlook.sdk.smartlook.Smartlook");
+        return Smartlook.SL;
     }
 }
