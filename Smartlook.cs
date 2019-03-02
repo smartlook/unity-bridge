@@ -9,13 +9,13 @@ public class Smartlook
     public static AndroidJavaClass SL = null;
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeInit(string key);
+    private static extern void SmartlookInit(string key);
 
     public static void Init(string key)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeInit(key);
+            SmartlookInit(key);
         }
         else
         {
@@ -26,13 +26,13 @@ public class Smartlook
     }
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeInitWithFramerate(string key, int framerate);
+    private static extern void SmartlookInitWithFramerate(string key, int framerate);
 
     public static void Init(string key, int framerate)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeInitWithFramerate(key, framerate);
+            SmartlookInitWithFramerate(key, framerate);
         }
         else
         {
@@ -45,13 +45,13 @@ public class Smartlook
 
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeRecordEvent(string eventName);
+    private static extern void SmartlookRecordEvent(string eventName);
 
     public static void RecordEvent(string eventName)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeRecordEvent(eventName);
+            SmartlookRecordEvent(eventName);
         }
         else
         {
@@ -63,13 +63,13 @@ public class Smartlook
 
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeRecordEventWithProperties(string eventName, string properties);
+    private static extern void SmartlookRecordEventWithProperties(string eventName, string properties);
 
     public static void RecordEvent(string eventName, string properties)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeRecordEventWithProperties(eventName, properties);
+            SmartlookRecordEventWithProperties(eventName, properties);
         }
         else
         {
@@ -95,13 +95,13 @@ public class Smartlook
     }
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeSetUserIdentifier(string userIdentifier);
+    private static extern void SmartlookSetUserIdentifier(string userIdentifier);
 
     public static void SetUserIdentifier(string userIdentifier)
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeSetUserIdentifier(userIdentifier);
+            SmartlookSetUserIdentifier(userIdentifier);
         }
         else
         {
@@ -113,13 +113,13 @@ public class Smartlook
 
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgePauseRecording();
+    private static extern void SmartlookPauseRecording();
 
     public static void PauseRecording()
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgePauseRecording();
+            SmartlookPauseRecording();
         }
         else
         {
@@ -129,13 +129,13 @@ public class Smartlook
 
 
     [DllImport("__Internal")]
-    private static extern void SmartlookUnityBridgeResumeRecording();
+    private static extern void SmartlookResumeRecording();
 
     public static void ResumeRecording()
     {
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            SmartlookUnityBridgeResumeRecording();
+            SmartlookResumeRecording();
         }
         else
         {
