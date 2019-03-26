@@ -8,8 +8,10 @@ public class Smartlook
 {
     public static AndroidJavaClass SL = null;
 
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeInit(string key);
+    #endif
 
     public static void Init(string key)
     {
@@ -25,8 +27,10 @@ public class Smartlook
         }
     }
 
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeInitWithFramerate(string key, int framerate);
+    #endif
 
     public static void Init(string key, int framerate)
     {
@@ -43,9 +47,10 @@ public class Smartlook
         }
     }
 
-
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeRecordEvent(string eventName);
+    #endif
 
     public static void RecordEvent(string eventName)
     {
@@ -61,9 +66,10 @@ public class Smartlook
         }
     }
 
-
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeRecordEventWithProperties(string eventName, string properties);
+    #endif
 
     public static void RecordEvent(string eventName, string properties)
     {
@@ -94,8 +100,10 @@ public class Smartlook
         }
     }
 
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeSetUserIdentifier(string userIdentifier);
+    #endif
 
     public static void SetUserIdentifier(string userIdentifier)
     {
@@ -112,8 +120,10 @@ public class Smartlook
     }
 
 
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgePauseRecording();
+    #endif
 
     public static void PauseRecording()
     {
@@ -127,9 +137,10 @@ public class Smartlook
         }
     }
 
-
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void SmartlookUnityBridgeResumeRecording();
+    #endif
 
     public static void ResumeRecording()
     {
