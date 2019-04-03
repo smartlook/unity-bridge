@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace SmartLookUnity {
-  public partial class SmartLook {
+namespace SmartlookUnity {
+  public partial class Smartlook {
     [DllImport("__Internal")]
     static extern void SmartlookInit(string key);
 

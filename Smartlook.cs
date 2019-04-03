@@ -1,5 +1,5 @@
-namespace SmartLookUnity {
-  public static partial class SmartLook {
+namespace SmartlookUnity {
+  public static partial class Smartlook {
     public static void Init(string key) { InitInternal(key); }
     static partial void InitInternal(string key);
 
