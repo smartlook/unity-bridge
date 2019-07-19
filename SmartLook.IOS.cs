@@ -4,6 +4,61 @@ using UnityEngine;
 
 namespace SmartLookUnity {
   public partial class SmartLook {
+
+    static partial void SetupAndStartRecordingInternal(string key) {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void SetupAndStartRecordingInternal(string key, int frameRate) {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void SetupInternal(string key) {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void SetupInternal(string key, int frameRate) {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void StartFullscreenSensitiveModeInternal() {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void StopFullscreenSensitiveModeInternal() {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void SetReferrerInternal(string referrer, string source) {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void StartRecordingInternal() {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
+    static partial void StopRecordingInternal() {
+      if (Application.platform == RuntimePlatform.IPhonePlayer) {
+        
+      }
+    }
+
     [DllImport("__Internal")]
     static extern void SmartlookInit(string key);
 
