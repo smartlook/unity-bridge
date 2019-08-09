@@ -1,7 +1,7 @@
 using UnityEngine;
 
-namespace SmartLookUnity {
-  public static partial class SmartLook {
+namespace SmartlookUnity {
+  public static partial class Smartlook {
 
     public static void SetupAndStartRecording(string key) { SetupAndStartRecordingInternal(key); }
     static partial void SetupAndStartRecordingInternal(string key);

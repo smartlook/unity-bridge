@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace SmartLookUnity {
-  public partial class SmartLook {
+namespace SmartlookUnity {
+  public partial class Smartlook {
 
     static partial void SetupAndStartRecordingInternal(string key) {
       if (Application.platform == RuntimePlatform.IPhonePlayer) {

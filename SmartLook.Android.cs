@@ -1,8 +1,8 @@
 #if UNITY_ANDROID
 using UnityEngine;
 
-namespace SmartLookUnity {
-  public partial class SmartLook {
+namespace SmartlookUnity {
+  public partial class Smartlook {
     static AndroidJavaClass SL;
     
     static AndroidJavaClass getSLClass() {
