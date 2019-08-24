@@ -101,7 +101,9 @@ namespace SmartlookUnity {
             if (Application.platform == RuntimePlatform.Android) {
                 return getSLClass().CallStatic<bool>("isRecording");
             }
-#elif UNITY_IOS
+#endif
+
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return IsRecordingInternalIOS();
             }
@@ -114,7 +116,9 @@ namespace SmartlookUnity {
             if (Application.platform == RuntimePlatform.Android) {
                 return getSLClass().CallStatic<string>("getDashboardSessionUrl");
             }
-#elif UNITY_IOS
+#endif
+            
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return GetDashboardSessionUrlInternalIOS();
             }
