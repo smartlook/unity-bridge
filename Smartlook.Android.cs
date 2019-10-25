@@ -76,6 +76,18 @@ namespace SmartlookUnity {
       }
     }
 
+    static partial void RecordNavigationEventInternal(string screenName, NavigationEventType direction) {
+      if (Application.platform == RuntimePlatform.Android) {
+        string internalDirection = "start";
+
+        if (direction.Equals(NavigationEventType.exit)) {
+          internalDirection = "stop";
+        }
+
+        getSLClass().CallStatic("trackNavigationEvent", screenName, internalDirection);
+      }
+    }
+
     static partial void TimeEventInternal(string eventName) {
       if (Application.platform == RuntimePlatform.Android) {
         getSLClass().CallStatic("timeEvent", eventName);

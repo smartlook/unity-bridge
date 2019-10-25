@@ -3,6 +3,8 @@ using UnityEngine;
 namespace SmartlookUnity {
     public static partial class Smartlook {
 
+        public enum NavigationEventType { enter = 0, exit = 1 }
+
         // Setup Smartlook and start recording.
         /// <param name="key">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
         public static void SetupAndStartRecording(string key) { SetupAndStartRecordingInternal(key); }
@@ -38,6 +40,11 @@ namespace SmartlookUnity {
         /// <param name="eventName">Name that identifies the event.</param>
         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
         public static void RecordEvent(string eventName, string properties) { RecordEventInternal(eventName, properties); }
+
+        // Records navigation event
+        /// <param name="screenName">Name that identifies the screen user is currently on.</param>
+        /// <param name="direction">Navigation direction. Either entering the screen, or exiting the screen.</param>
+        public static void RecordNavigationEvent(string screenName, NavigationEventType direction) { RecordNavigationEventInternal(screenName, direction); }
 
         // Returns URL leading to the Dashboard player for the current Smartlook session. This URL can be access by everyone with the access rights to the dashboard.
         public static string GetDashboardSessionUrl() { return GetDashboardSessionUrlInternal(); }
@@ -84,6 +91,7 @@ namespace SmartlookUnity {
          static partial void StopRecordingInternal();
          static partial void RecordEventInternal(string eventName);
          static partial void RecordEventInternal(string eventName, string properties);
+         static partial void RecordNavigationEventInternal(string screenName, NavigationEventType direction);
          static partial void StartFullscreenSensitiveModeInternal();
          static partial void StopFullscreenSensitiveModeInternal();
          static partial void SetReferrerInternal(string referrer, string source);
