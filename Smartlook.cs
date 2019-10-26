@@ -44,7 +44,7 @@ namespace SmartlookUnity {
         // Records navigation event
         /// <param name="screenName">Name that identifies the screen user is currently on.</param>
         /// <param name="direction">Navigation direction. Either entering the screen, or exiting the screen.</param>
-        public static void RecordNavigationEvent(string screenName, NavigationEventType direction) { RecordNavigationEventInternal(screenName, direction); }
+        public static void RecordNavigationEvent(string screenName, NavigationEventType direction) { RecordNavigationEventInternal(screenName, (int)direction); }
 
         // Returns URL leading to the Dashboard player for the current Smartlook session. This URL can be access by everyone with the access rights to the dashboard.
         public static string GetDashboardSessionUrl() { return GetDashboardSessionUrlInternal(); }
@@ -91,7 +91,7 @@ namespace SmartlookUnity {
          static partial void StopRecordingInternal();
          static partial void RecordEventInternal(string eventName);
          static partial void RecordEventInternal(string eventName, string properties);
-         static partial void RecordNavigationEventInternal(string screenName, NavigationEventType direction);
+         static partial void RecordNavigationEventInternal(string screenName, int direction);
          static partial void StartFullscreenSensitiveModeInternal();
          static partial void StopFullscreenSensitiveModeInternal();
          static partial void SetReferrerInternal(string referrer, string source);

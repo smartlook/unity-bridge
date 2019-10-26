@@ -126,7 +126,7 @@ namespace SmartlookUnity {
 		[DllImport("__Internal")]
 		static extern void SmartlookRecordNavigationEvent(string screenName, int direction);
 		
-		static partial void RecordNavigationEventInternal(string screenName, NavigationEventType direction) {
+		static partial void RecordNavigationEventInternal(string screenName, int direction) {
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
 				SmartlookRecordNavigationEvent(screenName, direction);
 			}
