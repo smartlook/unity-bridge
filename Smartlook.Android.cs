@@ -76,7 +76,7 @@ namespace SmartlookUnity {
       }
     }
 
-    static partial void RecordNavigationEventInternal(string screenName, NavigationEventType direction) {
+    static partial void RecordNavigationEventInternal(string screenName, int direction) {
       if (Application.platform == RuntimePlatform.Android) {
         string internalDirection = "start";
 
