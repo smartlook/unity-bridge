@@ -183,6 +183,14 @@ namespace SmartlookUnity {
 			return SmartlookGetDashboardSessionUrl();
 		}
 
+		[DllImport("__Internal")]
+		static extern void SmartlookEnableCrashlytics(bool enable);
+
+		static partial void EnableCrashlyticsInternal(bool enable) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookEnableCrashlytics(enable);
+			}
+		}
 	}
 }
 

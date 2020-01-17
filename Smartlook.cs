@@ -48,15 +48,18 @@ namespace SmartlookUnity {
 
         // Returns URL leading to the Dashboard player for the current Smartlook session. This URL can be access by everyone with the access rights to the dashboard.
         public static string GetDashboardSessionUrl() { return GetDashboardSessionUrlInternal(); }
-
+        
         // Use this method to enter the **full sensitive mode**. No video is recorded, just analytics events.
         public static void StartFullscreenSensitiveMode() { StartFullscreenSensitiveModeInternal(); }
 
         // Use this method to leave the **full sensitive mode**. Video is recorded again.
         public static void StopFullscreenSensitiveMode() { StopFullscreenSensitiveModeInternal(); }
 
-
         public static void SetReferrer(string referrer, string source) { SetReferrerInternal(referrer, source); }
+        
+        // Enables/disabled Crashlytics integration
+        public static void EnableCrashlytics(bool enable) { EnableCrashlyticsInternal(enable); }
+
 
         /**
             Start timer for custom event.
@@ -95,6 +98,7 @@ namespace SmartlookUnity {
          static partial void StartFullscreenSensitiveModeInternal();
          static partial void StopFullscreenSensitiveModeInternal();
          static partial void SetReferrerInternal(string referrer, string source);
+         static partial void EnableCrashlyticsInternal(bool enable);
          static partial void TimeEventInternal(string eventName);
          static partial void SetUserIdentifierInternal(string userIdentifier);
 
