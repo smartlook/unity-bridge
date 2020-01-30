@@ -123,6 +123,12 @@ namespace SmartlookUnity {
         getSLClass().CallStatic("stopRecording");
       }
     }
+
+    static partial void EnableCrashlyticsInternal(bool enable) {
+      if (Application.platform == RuntimePlatform.Android) {
+        getSLClass().CallStatic("enableCrashlytics", enable);
+      }
+    }
   }
 }
 #endif
