@@ -49,8 +49,13 @@ namespace SmartlookUnity {
          public static void StopTimedCustomEvent(string eventName, string properties) { return StopTimedCustomEventInternal(eventName, properties); }
 
          /// <param name="eventName">Name of the event.</param>
+         /// <param name="reason">Cancellation Reason</param>
+         public static void CancelTimedCustomEvent(string eventName, string reason) { return CancelTimedCustomEventInternal(eventName, reason); }
+
+         /// <param name="eventName">Name of the event.</param>
+         /// <param name="reason">Cancellation Reason</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void CancelTimedCustomEvent(string eventName, string properties) { return CancelTimedCustomEventInternal(eventName, properties); }
+         public static void CancelTimedCustomEvent(string eventName, string reason, string properties) { return CancelTimedCustomEventInternal(eventName, reason, properties); }
 
         // Records timestamped custom event.
         /// <param name="eventName">Name that identifies the event.</param>
@@ -180,10 +185,25 @@ namespace SmartlookUnity {
             return "";
         }
 
-        public static string CancelTimedCustomEventInternal(string eventName, string properties) {
+        public static string CancelTimedCustomEventInternal(string eventName, string reason) {
             #if UNITY_ANDROID            
             if (Application.platform == RuntimePlatform.Android) {
-                return getSLClass().CallStatic<string>("cancelTimedCustomEvent", eventName, properties);
+                return getSLClass().CallStatic<string>("cancelTimedCustomEvent", eventName, reason);
+            }
+            #endif
+            
+            #if UNITY_IOS
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                return ""; //TODO
+            }
+            #endif
+            return "";
+        }
+
+        public static string CancelTimedCustomEventInternal(string eventName, string reason, string properties) {
+            #if UNITY_ANDROID            
+            if (Application.platform == RuntimePlatform.Android) {
+                return getSLClass().CallStatic<string>("cancelTimedCustomEvent", eventName, reason, properties);
             }
             #endif
             
