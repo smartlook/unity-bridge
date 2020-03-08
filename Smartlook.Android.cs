@@ -76,6 +76,30 @@ namespace SmartlookUnity {
       }
     }
 
+    static partial void StopTimedCustomEventInternal(string eventId) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("stopTimedCustomEvent", eventId);
+        }
+    }
+
+    static partial void StopTimedCustomEventInternal(string eventId, string properties) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("stopTimedCustomEvent", eventId, properties);
+        }
+    }
+
+    static partial void CancelTimedCustomEventInternal(string eventId, string reason) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("cancelTimedCustomEvent", eventId, reason);
+        }
+    }
+
+    static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("cancelTimedCustomEvent", eventId, reason, properties);
+        }
+    }
+
     static partial void SetGlobalEventPropertyInternal(string eventName, string eventValue, bool immutable) {
       if (Application.platform == RuntimePlatform.Android) {
         getSLClass().CallStatic("setGlobalEventProperty", eventName, eventValue, immutable);

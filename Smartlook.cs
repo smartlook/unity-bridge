@@ -43,10 +43,23 @@ namespace SmartlookUnity {
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
          public static string StartTimedCustomEvent(string eventName, string properties) { return StartTimedCustomEventInternal(eventName, properties); }
 
+         /**
+            Start timer for custom event.
+         
+            This method does not record an event. It is the subsequent `RecordEvent` call with the same `eventName` that does.
+
+            In the resulting event, the property dictionaries of `start` and `record` are merged (the `record` values override the `start` ones if the key is the same), and a `duration` property is added to them.
+         */
+         /// <param name="eventName">Name of the event.</param>
+         public static string StartTimedCustomEvent(string eventName) { return StartTimedCustomEventInternal(eventName); }
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void StopTimedCustomEvent(string eventName, string properties) { return StopTimedCustomEventInternal(eventName, properties); }
+         public static void StopTimedCustomEvent(string eventName) { return StopTimedCustomEventInternal(eventId); }
+
+         /// <param name="eventName">Name of the event.</param>
+         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+         public static void StopTimedCustomEvent(string eventName, string properties) { return StopTimedCustomEventInternal(eventId, properties); }
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="reason">Cancellation Reason</param>
@@ -124,6 +137,11 @@ namespace SmartlookUnity {
          static partial void TimeEventInternal(string eventName);
          static partial void SetUserIdentifierInternal(string userIdentifier);
          static partial void SetUserIdentifierInternal(string userIdentifier, string properties);
+         static partial void StopTimedCustomEventInternal(string eventId);
+         static partial void StopTimedCustomEventInternal(string eventId, string properties);
+         static partial void CancelTimedCustomEventInternal(string eventId, string reason);
+         static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties);
+
 
          public static bool IsRecordingInternal() {
             #if UNITY_ANDROID            
@@ -155,55 +173,25 @@ namespace SmartlookUnity {
             return "";
         }
 
+        public static string StartTimedCustomEventInternal(string eventName) {
+            #if UNITY_ANDROID            
+            if (Application.platform == RuntimePlatform.Android) {
+                return getSLClass().CallStatic<string>("startTimedCustomEvent", eventName);
+            }
+            #endif
+            
+            #if UNITY_IOS
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                return ""; //TODO
+            }
+            #endif
+            return "";
+        }
+
         public static string StartTimedCustomEventInternal(string eventName, string properties) {
             #if UNITY_ANDROID            
             if (Application.platform == RuntimePlatform.Android) {
                 return getSLClass().CallStatic<string>("startTimedCustomEvent", eventName, properties);
-            }
-            #endif
-            
-            #if UNITY_IOS
-            if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                return ""; //TODO
-            }
-            #endif
-            return "";
-        }
-
-        public static string StopTimedCustomEventInternal(string eventName, string properties) {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
-                return getSLClass().CallStatic<string>("stopTimedCustomEvent", eventName, properties);
-            }
-            #endif
-            
-            #if UNITY_IOS
-            if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                return ""; //TODO
-            }
-            #endif
-            return "";
-        }
-
-        public static string CancelTimedCustomEventInternal(string eventName, string reason) {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
-                return getSLClass().CallStatic<string>("cancelTimedCustomEvent", eventName, reason);
-            }
-            #endif
-            
-            #if UNITY_IOS
-            if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                return ""; //TODO
-            }
-            #endif
-            return "";
-        }
-
-        public static string CancelTimedCustomEventInternal(string eventName, string reason, string properties) {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
-                return getSLClass().CallStatic<string>("cancelTimedCustomEvent", eventName, reason, properties);
             }
             #endif
             
