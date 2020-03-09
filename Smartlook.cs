@@ -32,40 +32,43 @@ namespace SmartlookUnity {
         // Current video and events recording state.
         public static bool IsRecording() { return IsRecordingInternal(); }
 
-        /**
-            Start timer for custom event.
-         
-            This method does not record an event. It is the subsequent `RecordEvent` call with the same `eventName` that does.
+        /// <summary>
+        /// Start timer for custom event.
+        /// This method does not record an event. It is the subsequent `RecordEvent` call with the same `eventId` that does.
+        /// In the resulting event, the property dictionaries of `start` and `record` are merged (the `record` values override the `start` ones if the key is the same), and a `duration` property is added to them.
+        /// <summary>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+        /// <returns>
+        /// eventId that can be used in StopTimedCustomEvent or CancelTimedCustomEvent methods
+        /// </returns>
+        public static string StartTimedCustomEvent(string eventName, string properties) { return StartTimedCustomEventInternal(eventName, properties); }
 
-            In the resulting event, the property dictionaries of `start` and `record` are merged (the `record` values override the `start` ones if the key is the same), and a `duration` property is added to them.
-         */
-         /// <param name="eventName">Name of the event.</param>
-         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static string StartTimedCustomEvent(string eventName, string properties) { return StartTimedCustomEventInternal(eventName, properties); }
-
-         /**
-            Start timer for custom event.
-         
-            This method does not record an event. It is the subsequent `RecordEvent` call with the same `eventName` that does.
-
-            In the resulting event, the property dictionaries of `start` and `record` are merged (the `record` values override the `start` ones if the key is the same), and a `duration` property is added to them.
-         */
+        /// <summary>
+        /// Start timer for custom event.
+        /// This method does not record an event. It is the subsequent `RecordEvent` call with the same `eventId` that does.
+        /// In the resulting event, the property dictionaries of `start` and `record` are merged (the `record` values override the `start` ones if the key is the same), and a `duration` property is added to them.
+        /// <summary>
+        /// <param name="eventName">Name of the event.</param>
+        /// <returns>
+        /// eventId that can be used in StopTimedCustomEvent or CancelTimedCustomEvent methods
+        /// </returns>
          /// <param name="eventName">Name of the event.</param>
          public static string StartTimedCustomEvent(string eventName) { return StartTimedCustomEventInternal(eventName); }
 
-         /// <param name="eventName">Name of the event.</param>
+         /// <param name="eventId">Name of the event.</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
          public static void StopTimedCustomEvent(string eventId) { StopTimedCustomEventInternal(eventId); }
 
-         /// <param name="eventName">Name of the event.</param>
+         /// <param name="eventId">Name of the event.</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
          public static void StopTimedCustomEvent(string eventId, string properties) { StopTimedCustomEventInternal(eventId, properties); }
 
-         /// <param name="eventName">Name of the event.</param>
+         /// <param name="eventId">Name of the event.</param>
          /// <param name="reason">Cancellation Reason</param>
          public static void CancelTimedCustomEvent(string eventId, string reason) { CancelTimedCustomEventInternal(eventId, reason); }
 
-         /// <param name="eventName">Name of the event.</param>
+         /// <param name="eventId">Name of the event.</param>
          /// <param name="reason">Cancellation Reason</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
          public static void CancelTimedCustomEvent(string eventId, string reason, string properties) { CancelTimedCustomEventInternal(eventId, reason, properties); }

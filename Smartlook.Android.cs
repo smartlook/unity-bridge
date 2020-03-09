@@ -124,12 +124,6 @@ namespace SmartlookUnity {
       }
     }
 
-    static partial void TimeEventInternal(string eventName) {
-      if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("timeEvent", eventName);
-      }
-    }
-
     static partial void SetUserIdentifierInternal(string userIdentifier) {
       if (Application.platform == RuntimePlatform.Android) {
         getSLClass().CallStatic("setUserIdentifier", userIdentifier);
