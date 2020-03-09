@@ -55,20 +55,20 @@ namespace SmartlookUnity {
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void StopTimedCustomEvent(string eventName) { return StopTimedCustomEventInternal(eventId); }
+         public static void StopTimedCustomEvent(string eventId) { StopTimedCustomEventInternal(eventId); }
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void StopTimedCustomEvent(string eventName, string properties) { return StopTimedCustomEventInternal(eventId, properties); }
+         public static void StopTimedCustomEvent(string eventId, string properties) { StopTimedCustomEventInternal(eventId, properties); }
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="reason">Cancellation Reason</param>
-         public static void CancelTimedCustomEvent(string eventName, string reason) { return CancelTimedCustomEventInternal(eventName, reason); }
+         public static void CancelTimedCustomEvent(string eventId, string reason) { CancelTimedCustomEventInternal(eventId, reason); }
 
          /// <param name="eventName">Name of the event.</param>
          /// <param name="reason">Cancellation Reason</param>
          /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void CancelTimedCustomEvent(string eventName, string reason, string properties) { return CancelTimedCustomEventInternal(eventName, reason, properties); }
+         public static void CancelTimedCustomEvent(string eventId, string reason, string properties) { CancelTimedCustomEventInternal(eventId, reason, properties); }
 
         // Records timestamped custom event.
         /// <param name="eventName">Name that identifies the event.</param>
@@ -84,13 +84,13 @@ namespace SmartlookUnity {
         /// <param name="direction">Navigation direction. Either entering the screen, or exiting the screen.</param>
         public static void TrackNavigationEvent(string screenName, NavigationEventType direction) { TrackNavigationEventInternal(screenName, (int)direction); }
 
-        public static void SetGlobalEventProperty(string eventName, string eventValue, bool immutable) { SetGlobalEventPropertyInternal(eventName, eventValue, immutable); };
+        public static void SetGlobalEventProperty(string key, string value, bool immutable) { SetGlobalEventPropertyInternal(key, value, immutable); }
 
-        public static void SetGlobalEventProperties(string properties, bool immutable) { SetGlobalEventPropertiesInternal(properties, immutable); };
+        public static void SetGlobalEventProperties(string properties, bool immutable) { SetGlobalEventPropertiesInternal(properties, immutable); }
 
-        public static void RemoveGlobalEventProperty(string eventName) { RemoveGlobalEventPropertyInternal(eventName); };
+        public static void RemoveGlobalEventProperty(string key) { RemoveGlobalEventPropertyInternal(key); }
 
-        public static void RemoveAllGlobalEventProperties() { RemoveAllGlobalEventPropertiesInternal(); };
+        public static void RemoveAllGlobalEventProperties() { RemoveAllGlobalEventPropertiesInternal(); }
 
         // Returns URL leading to the Dashboard player for the current Smartlook session. This URL can be access by everyone with the access rights to the dashboard.
         public static string GetDashboardSessionUrl() { return GetDashboardSessionUrlInternal(); }
@@ -126,15 +126,14 @@ namespace SmartlookUnity {
          static partial void TrackCustomEventInternal(string eventName);
          static partial void TrackCustomEventInternal(string eventName, string properties);
          static partial void TrackNavigationEventInternal(string screenName, int direction);
-         static partial void SetGlobalEventPropertyInternal(string eventName, string eventValue, bool immutable);
+         static partial void SetGlobalEventPropertyInternal(string key, string value, bool immutable);
          static partial void SetGlobalEventPropertiesInternal(string properties, bool immutable);
-         static partial void RemoveGlobalEventPropertyInternal(string eventName);
+         static partial void RemoveGlobalEventPropertyInternal(string key);
          static partial void RemoveAllGlobalEventPropertiesInternal();
          static partial void StartFullscreenSensitiveModeInternal();
          static partial void StopFullscreenSensitiveModeInternal();
          static partial void SetReferrerInternal(string referrer, string source);
          static partial void EnableCrashlyticsInternal(bool enable);
-         static partial void TimeEventInternal(string eventName);
          static partial void SetUserIdentifierInternal(string userIdentifier);
          static partial void SetUserIdentifierInternal(string userIdentifier, string properties);
          static partial void StopTimedCustomEventInternal(string eventId);
@@ -182,7 +181,7 @@ namespace SmartlookUnity {
             
             #if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                return ""; //TODO
+                return StartTimedCustomEventInternalIOS(eventName);
             }
             #endif
             return "";
@@ -197,7 +196,7 @@ namespace SmartlookUnity {
             
             #if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                return ""; //TODO
+                return StartTimedCustomEventInternalIOS(eventName, properties);
             }
             #endif
             return "";

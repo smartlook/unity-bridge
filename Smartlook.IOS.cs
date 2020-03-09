@@ -86,61 +86,33 @@ namespace SmartlookUnity {
 				SmartlookSetReferrer(referrer, source);
 			}
 		}
-		
+			
 		[DllImport("__Internal")]
-		static extern void SmartlookInit(string key);
+		static extern void SmartlookTrackCustomEvent(string eventName);
 		
-		static partial void InitInternal(string key) {
+		static partial void TrackCustomEventInternal(string eventName) {
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookInit(key);
+				SmartlookTrackCustomEvent(eventName);
 			}
 		}
 		
 		[DllImport("__Internal")]
-		static extern void SmartlookInitWithFramerate(string key, int framerate);
+		static extern void SmartlookTrackCustomEventWithProperties(string eventName, string properties);
 		
-		static partial void InitInternal(string key, int frameRate) {
+		static partial void TrackCustomEventInternal(string eventName, string properties) {
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookInitWithFramerate(key, frameRate);
-			}
-		}
-		
-		[DllImport("__Internal")]
-		static extern void SmartlookRecordEvent(string eventName);
-		
-		static partial void RecordEventInternal(string eventName) {
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookRecordEvent(eventName);
-			}
-		}
-		
-		[DllImport("__Internal")]
-		static extern void SmartlookRecordEventWithProperties(string eventName, string properties);
-		
-		static partial void RecordEventInternal(string eventName, string properties) {
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookRecordEventWithProperties(eventName, properties);
+				SmartlookTrackCustomEventWithProperties(eventName, properties);
 			}
 		}
 
 		[DllImport("__Internal")]
-		static extern void SmartlookRecordNavigationEvent(string screenName, int direction);
+		static extern void SmartlookTrackNavigationEvent(string screenName, int direction);
 		
-		static partial void RecordNavigationEventInternal(string screenName, int direction) {
+		static partial void TrackNavigationEventInternal(string screenName, int direction) {
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookRecordNavigationEvent(screenName, direction);
+				SmartlookTrackNavigationEvent(screenName, direction);
 			}
 		}		
-
-		[DllImport("__Internal")]
-		static extern void SmartlookTimeEvent(string eventName);
-		
-		static partial void TimeEventInternal(string eventName) {
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookTimeEvent(eventName);
-			}
-		}
-
 		
 		[DllImport("__Internal")]
 		static extern void SmartlookSetUserIdentifier(string userIdentifier);
@@ -150,22 +122,13 @@ namespace SmartlookUnity {
 				SmartlookSetUserIdentifier(userIdentifier);
 			}
 		}
-		
+
 		[DllImport("__Internal")]
-		static extern void SmartlookPauseRecording();
+		static extern void SmartlookSetUserIdentifierWithProperties(string userIdentifier, string properties);
 		
-		static partial void PauseRecordingInternal() {
+		static partial void SetUserIdentifierInternal(string userIdentifier, string properties) {
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookPauseRecording();
-			}
-		}
-		
-		[DllImport("__Internal")]
-		static extern void SmartlookResumeRecording();
-		
-		static partial void ResumeRecordingInternal() {
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				SmartlookResumeRecording();
+				SmartlookSetUserIdentifierWithProperties(userIdentifier, properties);
 			}
 		}
 
@@ -173,14 +136,22 @@ namespace SmartlookUnity {
 		static extern bool SmartlookIsRecording();
 
 		public static bool IsRecordingInternalIOS() {
-			return SmartlookIsRecording();
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				return SmartlookIsRecording();
+			}
+
+			return false;
 		}
 
 		[DllImport("__Internal")]
 		static extern string SmartlookGetDashboardSessionUrl();
 
 		public static string GetDashboardSessionUrlInternalIOS() {
-			return SmartlookGetDashboardSessionUrl();
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				return SmartlookGetDashboardSessionUrl();
+			}
+
+			return null;
 		}
 
 		[DllImport("__Internal")]
@@ -191,6 +162,103 @@ namespace SmartlookUnity {
 				SmartlookEnableCrashlytics(enable);
 			}
 		}
+
+		[DllImport("__Internal")]
+		static extern string SmartlookStartTimedCustomEvent(string eventName);
+
+		public static string StartTimedCustomEventInternalIOS(string eventName) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				return SmartlookStartTimedCustomEvent(eventName);
+			}
+
+			return null;
+		}
+
+		[DllImport("__Internal")]
+		static extern string SmartlookStartTimedCustomEventWithProperties(string eventName, string properties);
+
+		public static string StartTimedCustomEventInternalIOS(string eventName, string properties) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				return SmartlookStartTimedCustomEventWithProperties(eventName, properties);
+			}
+
+			return null;
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookStopTimedCustomEvent(string eventId);
+
+		static partial void StopTimedCustomEventInternal(string eventId) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookStopTimedCustomEvent(eventId);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookStopTimedCustomEventWithProperties(string eventId, string properties);
+
+		static partial void StopTimedCustomEventInternal(string eventId, string properties) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookStopTimedCustomEventWithProperties(eventId, properties);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookCancelTimedCustomEvent(string eventId, string reason);
+
+		static partial void CancelTimedCustomEventInternal(string eventId, string reason) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookCancelTimedCustomEvent(eventId, reason);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookCancelTimedCustomEventWithProperties(string eventId, string reason, string properties);
+
+		static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookCancelTimedCustomEventWithProperties(eventId, reason, properties);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookSetGlobalEventProperty(string key, string value, bool immutable);
+
+		static partial void SetGlobalEventPropertyInternal(string key, string value, bool immutable) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookSetGlobalEventProperty(key, value, immutable);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookSetGlobalEventProperties(string properties, bool immutable);
+
+		static partial void SetGlobalEventPropertiesInternal(string properties, bool immutable) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookSetGlobalEventProperties(properties, immutable);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookRemoveGlobalEventProperty(string key);
+
+		static partial void RemoveGlobalEventPropertyInternal(string key) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookRemoveGlobalEventProperty(key);
+			}
+		}
+
+		[DllImport("__Internal")]
+		static extern void SmartlookRemoveAllGlobalEventProperties();
+
+		static partial void RemoveAllGlobalEventPropertiesInternal() {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				SmartlookRemoveAllGlobalEventProperties();
+			}
+		}
+
+
+
 	}
 }
 
