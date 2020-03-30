@@ -51,32 +51,20 @@ namespace SmartlookUnity {
         getSLClass().CallStatic("setReferrer", referrer, source);
       }
     }
-    
-    static partial void InitInternal(string key) {
+
+    static partial void TrackCustomEventInternal(string eventName) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("init", key);
+        getSLClass().CallStatic("trackCustomEvent", eventName);
       }
     }
 
-    static partial void InitInternal(string key, int frameRate) {
+    static partial void TrackCustomEventInternal(string eventName, string properties) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("init", key, frameRate);
+        getSLClass().CallStatic("trackCustomEvent", eventName, properties);
       }
     }
 
-    static partial void RecordEventInternal(string eventName) {
-      if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("track", eventName);
-      }
-    }
-
-    static partial void RecordEventInternal(string eventName, string properties) {
-      if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("track", eventName, properties);
-      }
-    }
-
-    static partial void RecordNavigationEventInternal(string screenName, int direction) {
+    static partial void TrackNavigationEventInternal(string screenName, int direction) {
       if (Application.platform == RuntimePlatform.Android) {
         string internalDirection = "start";
 
@@ -88,27 +76,63 @@ namespace SmartlookUnity {
       }
     }
 
-    static partial void TimeEventInternal(string eventName) {
+    static partial void StopTimedCustomEventInternal(string eventId) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("stopTimedCustomEvent", eventId);
+        }
+    }
+
+    static partial void StopTimedCustomEventInternal(string eventId, string properties) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("stopTimedCustomEvent", eventId, properties);
+        }
+    }
+
+    static partial void CancelTimedCustomEventInternal(string eventId, string reason) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("cancelTimedCustomEvent", eventId, reason);
+        }
+    }
+
+    static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties) {
+        if (Application.platform == RuntimePlatform.Android) {
+          getSLClass().CallStatic("cancelTimedCustomEvent", eventId, reason, properties);
+        }
+    }
+
+    static partial void SetGlobalEventPropertyInternal(string eventName, string eventValue, bool immutable) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("timeEvent", eventName);
+        getSLClass().CallStatic("setGlobalEventProperty", eventName, eventValue, immutable);
+      }
+    }
+
+    static partial void SetGlobalEventPropertiesInternal(string properties, bool immutable) {
+      if (Application.platform == RuntimePlatform.Android) {
+        getSLClass().CallStatic("setGlobalEventProperties", properties, immutable);
+      }
+    }
+
+    static partial void RemoveGlobalEventPropertyInternal(string eventName) {
+      if (Application.platform == RuntimePlatform.Android) {
+        getSLClass().CallStatic("removeGlobalEventProperty", eventName);
+      }
+    }
+
+    static partial void RemoveAllGlobalEventPropertiesInternal() {
+      if (Application.platform == RuntimePlatform.Android) {
+        getSLClass().CallStatic("removeAllGlobalEventProperties");
       }
     }
 
     static partial void SetUserIdentifierInternal(string userIdentifier) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("identify", userIdentifier);
+        getSLClass().CallStatic("setUserIdentifier", userIdentifier);
       }
     }
 
-    static partial void PauseRecordingInternal() {
+    static partial void SetUserIdentifierInternal(string userIdentifier, string properties) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("pause");
-      }
-    }
-
-    static partial void ResumeRecordingInternal() {
-      if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("start");
+        getSLClass().CallStatic("setUserIdentifier", userIdentifier, properties);
       }
     }
 
