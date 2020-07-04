@@ -1,9 +1,21 @@
 using UnityEngine;
 
-namespace SmartlookUnity {
-    public static partial class Smartlook {
+namespace SmartlookUnity
+{
+    //Extended class can be passed to RegisterIntegrationListener method
+    public abstract class IntegrationListener : AndroidJavaProxy
+    {
+        public IntegrationListener() : base("com.smartlook.sdk.smartlook.IntegrationListener") { }
+
+        public abstract void OnSessionReady(string dashboardSessionUrl);
+        public abstract void OnVisitorReady(string dashboardVisitorUrl);
+    }
+
+    public static partial class Smartlook
+    {
 
         public enum NavigationEventType { enter = 0, exit = 1 }
+        public enum RenderingModeType { native = 0, no_rendering = 1 }
 
         // Setup Smartlook and start recording.
         /// <param name="key">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
@@ -53,25 +65,25 @@ namespace SmartlookUnity {
         /// <returns>
         /// eventId that can be used in StopTimedCustomEvent or CancelTimedCustomEvent methods
         /// </returns>
-         /// <param name="eventName">Name of the event.</param>
-         public static string StartTimedCustomEvent(string eventName) { return StartTimedCustomEventInternal(eventName); }
+        /// <param name="eventName">Name of the event.</param>
+        public static string StartTimedCustomEvent(string eventName) { return StartTimedCustomEventInternal(eventName); }
 
-         /// <param name="eventId">Name of the event.</param>
-         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void StopTimedCustomEvent(string eventId) { StopTimedCustomEventInternal(eventId); }
+        /// <param name="eventId">Name of the event.</param>
+        /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+        public static void StopTimedCustomEvent(string eventId) { StopTimedCustomEventInternal(eventId); }
 
-         /// <param name="eventId">Name of the event.</param>
-         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void StopTimedCustomEvent(string eventId, string properties) { StopTimedCustomEventInternal(eventId, properties); }
+        /// <param name="eventId">Name of the event.</param>
+        /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+        public static void StopTimedCustomEvent(string eventId, string properties) { StopTimedCustomEventInternal(eventId, properties); }
 
-         /// <param name="eventId">Name of the event.</param>
-         /// <param name="reason">Cancellation Reason</param>
-         public static void CancelTimedCustomEvent(string eventId, string reason) { CancelTimedCustomEventInternal(eventId, reason); }
+        /// <param name="eventId">Name of the event.</param>
+        /// <param name="reason">Cancellation Reason</param>
+        public static void CancelTimedCustomEvent(string eventId, string reason) { CancelTimedCustomEventInternal(eventId, reason); }
 
-         /// <param name="eventId">Name of the event.</param>
-         /// <param name="reason">Cancellation Reason</param>
-         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void CancelTimedCustomEvent(string eventId, string reason, string properties) { CancelTimedCustomEventInternal(eventId, reason, properties); }
+        /// <param name="eventId">Name of the event.</param>
+        /// <param name="reason">Cancellation Reason</param>
+        /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+        public static void CancelTimedCustomEvent(string eventId, string reason, string properties) { CancelTimedCustomEventInternal(eventId, reason, properties); }
 
         // Records timestamped custom event.
         /// <param name="eventName">Name that identifies the event.</param>
@@ -96,8 +108,12 @@ namespace SmartlookUnity {
         public static void RemoveAllGlobalEventProperties() { RemoveAllGlobalEventPropertiesInternal(); }
 
         // Returns URL leading to the Dashboard player for the current Smartlook session. This URL can be access by everyone with the access rights to the dashboard.
-        public static string GetDashboardSessionUrl() { return GetDashboardSessionUrlInternal(); }
-        
+        /// <param name="withCurrentTimestamp">If true recording starts at current time</param>
+        public static string GetDashboardSessionUrl(bool withCurrentTimestamp) { return GetDashboardSessionUrlInternal(withCurrentTimestamp); }
+
+        // Returns URL leading to the Dashboard for current visitor. This URL can be access by everyone with the access rights to the dashboard.
+        public static string GetDashboardVisitorUrl() { return GetDashboardVisitorUrlInternal(); }
+
         // Use this method to enter the **full sensitive mode**. No video is recorded, just analytics events.
         public static void StartFullscreenSensitiveMode() { StartFullscreenSensitiveModeInternal(); }
 
@@ -105,104 +121,158 @@ namespace SmartlookUnity {
         public static void StopFullscreenSensitiveMode() { StopFullscreenSensitiveModeInternal(); }
 
         public static void SetReferrer(string referrer, string source) { SetReferrerInternal(referrer, source); }
-        
+
         // Enables/disabled Crashlytics integration
         public static void EnableCrashlytics(bool enable) { EnableCrashlyticsInternal(enable); }
 
+        // Enables/disabled Crashlytics integration
+        public static void ResetSession(bool resetUser) { ResetSessionInternal(resetUser); }
+
+        // By changing rendering method you can adjust the way we render the application for recordings.
+        /// <param name="renderingMode">renderingMode Mode defining the video output of recording</param>
+        public static void SetRenderingMode(RenderingModeType renderingMode) { SetRenderingModeInternal((int)renderingMode); }
 
         // Set the app's user identifier.
         /// <param name="userIdentifier">The application-specific user identifier.</param>
-         public static void SetUserIdentifier(string userIdentifier) { SetUserIdentifierInternal(userIdentifier); }
+        public static void SetUserIdentifier(string userIdentifier) { SetUserIdentifierInternal(userIdentifier); }
 
-         // Set the app's user identifier.
+        // Set the app's user identifier.
         /// <param name="userIdentifier">The application-specific user identifier.</param>
-         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
-         public static void SetUserIdentifier(string userIdentifier, string properties) { SetUserIdentifierInternal(userIdentifier, properties); }
+        /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
+        public static void SetUserIdentifier(string userIdentifier, string properties) { SetUserIdentifierInternal(userIdentifier, properties); }
+
+        // Set the app's user identifier.
+        /// <param name="integrationListener">listener for url updates</param>
+        public static void RegisterIntegrationListener(IntegrationListener integrationListener) { RegisterIntegrationListenerInternal(integrationListener); }
 
         // Internal
-         static partial void SetupAndStartRecordingInternal(string key);
-         static partial void SetupAndStartRecordingInternal(string key, int frameRate);
-         static partial void SetupInternal(string key);
-         static partial void SetupInternal(string key, int frameRate);
-         static partial void StartRecordingInternal();
-         static partial void StopRecordingInternal();
-         static partial void TrackCustomEventInternal(string eventName);
-         static partial void TrackCustomEventInternal(string eventName, string properties);
-         static partial void TrackNavigationEventInternal(string screenName, int direction);
-         static partial void SetGlobalEventPropertyInternal(string key, string value, bool immutable);
-         static partial void SetGlobalEventPropertiesInternal(string properties, bool immutable);
-         static partial void RemoveGlobalEventPropertyInternal(string key);
-         static partial void RemoveAllGlobalEventPropertiesInternal();
-         static partial void StartFullscreenSensitiveModeInternal();
-         static partial void StopFullscreenSensitiveModeInternal();
-         static partial void SetReferrerInternal(string referrer, string source);
-         static partial void EnableCrashlyticsInternal(bool enable);
-         static partial void SetUserIdentifierInternal(string userIdentifier);
-         static partial void SetUserIdentifierInternal(string userIdentifier, string properties);
-         static partial void StopTimedCustomEventInternal(string eventId);
-         static partial void StopTimedCustomEventInternal(string eventId, string properties);
-         static partial void CancelTimedCustomEventInternal(string eventId, string reason);
-         static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties);
+        static partial void SetupAndStartRecordingInternal(string key);
+        static partial void SetupAndStartRecordingInternal(string key, int frameRate);
+        static partial void SetupInternal(string key);
+        static partial void SetupInternal(string key, int frameRate);
+        static partial void StartRecordingInternal();
+        static partial void StopRecordingInternal();
+        static partial void TrackCustomEventInternal(string eventName);
+        static partial void TrackCustomEventInternal(string eventName, string properties);
+        static partial void TrackNavigationEventInternal(string screenName, int direction);
+        static partial void SetGlobalEventPropertyInternal(string key, string value, bool immutable);
+        static partial void SetGlobalEventPropertiesInternal(string properties, bool immutable);
+        static partial void RemoveGlobalEventPropertyInternal(string key);
+        static partial void RemoveAllGlobalEventPropertiesInternal();
+        static partial void StartFullscreenSensitiveModeInternal();
+        static partial void StopFullscreenSensitiveModeInternal();
+        static partial void SetReferrerInternal(string referrer, string source);
+        static partial void EnableCrashlyticsInternal(bool enable);
+        static partial void SetUserIdentifierInternal(string userIdentifier);
+        static partial void SetUserIdentifierInternal(string userIdentifier, string properties);
+        static partial void StopTimedCustomEventInternal(string eventId);
+        static partial void StopTimedCustomEventInternal(string eventId, string properties);
+        static partial void CancelTimedCustomEventInternal(string eventId, string reason);
+        static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties);
+        static partial void ResetSessionInternal(bool resetUser);
+        static partial void SetRenderingModeInternal(int renderingMode);
 
 
-         public static bool IsRecordingInternal() {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
+        public static bool IsRecordingInternal()
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
                 return getSLClass().CallStatic<bool>("isRecording");
             }
-            #endif
+#endif
 
-            #if UNITY_IOS
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return IsRecordingInternalIOS();
             }
-            #endif
+#endif
             return false;
         }
 
-        public static string GetDashboardSessionUrlInternal() {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
-                return getSLClass().CallStatic<string>("getDashboardSessionUrl");
+        public static string GetDashboardSessionUrlInternal(bool withCurrentTimestamp)
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                return getSLClass().CallStatic<string>("getDashboardSessionUrl", withCurrentTimestamp);
             }
-            #endif
-            
-            #if UNITY_IOS
+#endif
+
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return GetDashboardSessionUrlInternalIOS();
             }
-            #endif
+#endif
             return "";
         }
 
-        public static string StartTimedCustomEventInternal(string eventName) {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
+        public static string GetDashboardVisitorUrlInternal()
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                return getSLClass().CallStatic<string>("getDashboardVisitorUrl");
+            }
+#endif
+
+#if UNITY_IOS
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                //TODO : implementation
+                return "";
+            }
+#endif
+            return "";
+        }
+
+        public static string StartTimedCustomEventInternal(string eventName)
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
                 return getSLClass().CallStatic<string>("startTimedCustomEvent", eventName);
             }
-            #endif
-            
-            #if UNITY_IOS
+#endif
+
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return StartTimedCustomEventInternalIOS(eventName);
             }
-            #endif
+#endif
             return "";
         }
 
-        public static string StartTimedCustomEventInternal(string eventName, string properties) {
-            #if UNITY_ANDROID            
-            if (Application.platform == RuntimePlatform.Android) {
+        public static string StartTimedCustomEventInternal(string eventName, string properties)
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
                 return getSLClass().CallStatic<string>("startTimedCustomEvent", eventName, properties);
             }
-            #endif
-            
-            #if UNITY_IOS
+#endif
+
+#if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 return StartTimedCustomEventInternalIOS(eventName, properties);
             }
-            #endif
+#endif
             return "";
+        }
+
+        private static void RegisterIntegrationListenerInternal(IntegrationListener integrationListener)
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic<string>("registerIntegrationListener", integrationListener);
+            }
+#endif
+
+#if UNITY_IOS
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                //TODO : implementation
+            }
+#endif
         }
     }
 }
