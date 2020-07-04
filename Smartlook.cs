@@ -7,8 +7,8 @@ namespace SmartlookUnity
     {
         public IntegrationListener() : base("com.smartlook.sdk.smartlook.IntegrationListener") { }
 
-        public abstract void OnSessionReady(string dashboardSessionUrl);
-        public abstract void OnVisitorReady(string dashboardVisitorUrl);
+        public abstract void onSessionReady(string dashboardSessionUrl);
+        public abstract void onVisitorReady(string dashboardVisitorUrl);
     }
 
     public static partial class Smartlook
@@ -264,7 +264,7 @@ namespace SmartlookUnity
 #if UNITY_ANDROID
             if (Application.platform == RuntimePlatform.Android)
             {
-                getSLClass().CallStatic<string>("registerIntegrationListener", integrationListener);
+                getSLClass().CallStatic("registerIntegrationListener", integrationListener);
             }
 #endif
 
