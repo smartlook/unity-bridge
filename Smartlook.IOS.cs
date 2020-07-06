@@ -275,6 +275,14 @@ namespace SmartlookUnity {
             }
         }   
 
+        [DllImport("__Internal")]
+        static extern void SmartlookUnregisterIntegrationListener();
+
+        static partial void UnregisterIntegrationListenerInternal() {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                SmartlookUnregisterIntegrationListener();
+            }
+        }
     }
 }
 

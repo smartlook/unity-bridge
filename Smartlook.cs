@@ -141,9 +141,13 @@ namespace SmartlookUnity
         /// <param name="properties">Optional dictionary (json string, obtained for example with JsonUtility.ToJson(param)) with additional information. Non String values will be stringlified.</param>
         public static void SetUserIdentifier(string userIdentifier, string properties) { SetUserIdentifierInternal(userIdentifier, properties); }
 
-        // Set the app's user identifier.
+        // Set integration listener
         /// <param name="integrationListener">listener for url updates</param>
         public static void RegisterIntegrationListener(IntegrationListener integrationListener) { RegisterIntegrationListenerInternal(integrationListener); }
+
+        // Unregister integration listener
+        public static void UnregisterIntegrationListener() { UnregisterIntegrationListenerInternal(); }
+
 
         // Internal
         static partial void SetupAndStartRecordingInternal(string key);
@@ -171,6 +175,7 @@ namespace SmartlookUnity
         static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties);
         static partial void ResetSessionInternal(bool resetUser);
         static partial void SetRenderingModeInternal(int renderingMode);
+        static partial void UnregisterIntegrationListenerInternal();
 
 
         public static bool IsRecordingInternal()

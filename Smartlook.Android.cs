@@ -226,6 +226,14 @@ namespace SmartlookUnity
                 getSLClass().CallStatic("setRenderingMode", internalRenderingMode);
             }
         }
+
+        static partial void UnregisterIntegrationListenerInternal()
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("unregisterIntegrationListener");
+            }
+        }
     }
 }
 #endif
