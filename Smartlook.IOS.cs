@@ -23,6 +23,15 @@ namespace SmartlookUnity {
                 SmartlookSetupAndStartRecordingWithFramerate(key, frameRate);
             }
         }
+
+        [DllImport("__Internal")]
+        static extern void SmartlookSetupAndStartRecordingWithOptions(string setupOptions);
+        
+        static partial void SetupAndStartRecordingInternal(SetupOptions setupOptions) {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                SmartlookSetupAndStartRecordingWithOptions(JsonUtility.ToJson(setupOptions));
+            }
+        }
         
         [DllImport("__Internal")]
         static extern void SmartlookSetup(string key);
@@ -39,6 +48,15 @@ namespace SmartlookUnity {
         static partial void SetupInternal(string key, int frameRate) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 SmartlookSetupWithFramerate(key, frameRate);
+            }
+        }
+
+        [DllImport("__Internal")]
+        static extern void SmartlookSetupWith(string setupOptions);
+        
+        static partial void SetupInternal(string key, int frameRate) {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                SmartlookSetupWithOptions(JsonUtility.ToJson(setupOptions));
             }
         }
         

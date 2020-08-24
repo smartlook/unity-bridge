@@ -11,6 +11,59 @@ namespace SmartlookUnity
         public abstract void onVisitorReady(string dashboardVisitorUrl);
     }
 
+    public class SetupOptionsBuilder
+    {
+        protected string ApiKey { get; set; }
+        protected int Fps { get; set; } = 2;
+        protected bool StartNewSession { get; set; } = false;
+        protected bool StartNewSessionAndUser { get; set; } = false;
+
+        public SetupOptionsBuilder(string ApiKey)
+        {
+            this.ApiKey = ApiKey;
+        }
+
+        public SetupOptionsBuilder SetFps(int Fps)
+        {
+            this.Fps = Fps;
+            return this;
+        }
+
+        public SetupOptionsBuilder SetStartNewSession(bool StartNewSession)
+        {
+            this.StartNewSession = StartNewSession;
+            return this;
+        }
+
+        public SetupOptionsBuilder SetStartNewSessionAndUser(bool StartNewSessionAndUser)
+        {
+            this.StartNewSessionAndUser = StartNewSessionAndUser;
+            return this;
+        }
+
+        public SetupOptions Build()
+        {
+            return new SetupOptions(ApiKey, Fps, StartNewSession, StartNewSessionAndUser);
+        }
+    }
+
+    public class SetupOptions
+    {
+        public string ApiKey;
+        public int Fps;
+        public bool StartNewSession;
+        public bool StartNewSessionAndUser;
+
+        public SetupOptions(string ApiKey, int Fps, bool StartNewSession, bool StartNewSessionAndUser)
+        {
+            this.ApiKey = ApiKey;
+            this.Fps = Fps;
+            this.StartNewSession = StartNewSession;
+            this.StartNewSessionAndUser = StartNewSessionAndUser;
+        }
+
+    }
+
     public static partial class Smartlook
     {
 
@@ -26,6 +79,10 @@ namespace SmartlookUnity
         /// <param name="frameRate">Custom recording framerate.</param> 
         public static void SetupAndStartRecording(string key, int frameRate) { SetupAndStartRecordingInternal(key, frameRate); }
 
+        // Setup Smartlook and start recording, with custom framerate.
+        /// <param name="setupOptions">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
+        public static void SetupAndStartRecording(SetupOptions setupOptions) { SetupAndStartRecordingInternal(setupOptions); }
+
         // Setup Smartlook. This method initializes Smartlook SDK, but does not start recording. To start recording, call StartRecording() method.
         /// <param name="key">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
         public static void Setup(string key) { SetupInternal(key); }
@@ -34,6 +91,10 @@ namespace SmartlookUnity
         /// <param name="key">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
         /// <param name="frameRate">Custom recording framerate.</param> 
         public static void Setup(string key, int frameRate) { SetupInternal(key, frameRate); }
+
+        // Setup Smartlook. This method initializes Smartlook SDK, but does not start recording. To start recording, call StartRecording() method.
+        /// <param name="setupOptions">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
+        public static void Setup(SetupOptions setupOptions) { SetupInternal(setupOptions); }
 
         // Starts video and events recording.
         public static void StartRecording() { StartRecordingInternal(); }
@@ -152,8 +213,10 @@ namespace SmartlookUnity
         // Internal
         static partial void SetupAndStartRecordingInternal(string key);
         static partial void SetupAndStartRecordingInternal(string key, int frameRate);
+        static partial void SetupAndStartRecordingInternal(SetupOptions setupOptions);
         static partial void SetupInternal(string key);
         static partial void SetupInternal(string key, int frameRate);
+        static partial void SetupInternal(SetupOptions setupOptions);
         static partial void StartRecordingInternal();
         static partial void StopRecordingInternal();
         static partial void TrackCustomEventInternal(string eventName);
