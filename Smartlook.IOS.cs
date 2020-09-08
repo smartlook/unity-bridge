@@ -3,6 +3,8 @@
 namespace SmartlookUnity {
     using System.Runtime.InteropServices;
     using UnityEngine;
+    using System.Collections;
+    using AOT;
     
     public partial class Smartlook {
         
@@ -52,9 +54,9 @@ namespace SmartlookUnity {
         }
 
         [DllImport("__Internal")]
-        static extern void SmartlookSetupWith(string setupOptions);
+        static extern void SmartlookSetupWithOptions(string setupOptions);
         
-        static partial void SetupInternal(string key, int frameRate) {
+        static partial void SetupInternal(SetupOptions setupOptions) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 SmartlookSetupWithOptions(JsonUtility.ToJson(setupOptions));
             }
@@ -172,6 +174,17 @@ namespace SmartlookUnity {
             return null;
         }
 
+		[DllImport("__Internal")]
+		static extern string SmartlookGetDashboardVisitorUrl();
+
+		public static string GetDashboardVisitorUrlInternalIOS() {
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				return SmartlookGetDashboardVisitorUrl();
+			}
+
+			return null;
+		}
+
         [DllImport("__Internal")]
         static extern void SmartlookEnableCrashlytics(bool enable);
 
@@ -277,10 +290,10 @@ namespace SmartlookUnity {
 
         [DllImport("__Internal")]
         static extern void SmartlookResetSession(bool resetUser);
-
+		
         static partial void ResetSessionInternal(bool resetUser) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                SmartlookEnableCrashlytics(resetUser);
+                SmartlookResetSession(resetUser);
             }
         }
 
@@ -289,16 +302,44 @@ namespace SmartlookUnity {
         
         static partial void SetRenderingModeInternal(int renderingMode) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                SmartlookTrackNavigationEvent(renderingMode);
+                SmartlookSetRenderingMode(renderingMode);
             }
-        }   
+        }
+        
+        private static IntegrationListener privateIntegrationListener;
+        private delegate void DelegateMessage(string message);
+ 
+        [MonoPInvokeCallback(typeof(DelegateMessage))] 
+        private static void delegateVisitorUrlChanged(string message) {
+            privateIntegrationListener.onVisitorReady(message);
+        }
+
+        [MonoPInvokeCallback(typeof(DelegateMessage))] 
+        private static void delegateSessionUrlChanged(string message) {
+            privateIntegrationListener.onSessionReady(message);
+        }
+
 
         [DllImport("__Internal")]
-        static extern void SmartlookUnregisterIntegrationListener();
+        static extern void SmartlookSetDashboardSessionUrlListener(DelegateMessage callback);
+        [DllImport("__Internal")]
+        static extern void SmartlookSetDashboardVisitorUrlListener(DelegateMessage callback);
+
+        public static void RegisterIntegrationListenerInternalIOS(IntegrationListener integrationListener) {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                privateIntegrationListener = integrationListener;
+
+				SmartlookSetDashboardSessionUrlListener(delegateSessionUrlChanged);
+                SmartlookSetDashboardVisitorUrlListener(delegateVisitorUrlChanged);
+            }
+        }
+
+        [DllImport("__Internal")]
+        static extern void SmartlookUnregisterDashboardListener();
 
         static partial void UnregisterIntegrationListenerInternal() {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                SmartlookUnregisterIntegrationListener();
+                SmartlookUnregisterDashboardListener();
             }
         }
     }
