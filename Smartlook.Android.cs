@@ -29,6 +29,14 @@ namespace SmartlookUnity
             }
         }
 
+        static partial void SetupAndStartRecordingInternal(SetupOptions setupOptions)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("setupAndStartRecordingBridge", JsonUtility.ToJson(setupOptions));
+            }
+        }
+
         static partial void SetupInternal(string key)
         {
             if (Application.platform == RuntimePlatform.Android)
@@ -42,6 +50,14 @@ namespace SmartlookUnity
             if (Application.platform == RuntimePlatform.Android)
             {
                 getSLClass().CallStatic("setup", key, frameRate);
+            }
+        }
+
+        static partial void SetupInternal(SetupOptions setupOptions)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("setupBridge", JsonUtility.ToJson(setupOptions));
             }
         }
 
