@@ -132,7 +132,8 @@ namespace SmartlookUnity {
 
     static partial void SetUserIdentifierInternal(string userIdentifier, string properties) {
       if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("setUserIdentifier", userIdentifier, properties);
+                getSLClass().CallStatic("setUserIdentifier", userIdentifier);
+                getSLClass().CallStatic("setUserProperties", properties, false);
       }
     }
 
