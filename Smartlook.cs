@@ -3,6 +3,7 @@ using UnityEngine;
 namespace SmartlookUnity
 {
     //Extended class can be passed to RegisterIntegrationListener method
+#if UNITY_ANDROID
     public abstract class IntegrationListener : AndroidJavaProxy
     {
         public IntegrationListener() : base("com.smartlook.sdk.smartlook.IntegrationListener") { }
@@ -10,6 +11,16 @@ namespace SmartlookUnity
         public abstract void onSessionReady(string dashboardSessionUrl);
         public abstract void onVisitorReady(string dashboardVisitorUrl);
     }
+#endif
+
+#if UNITY_IOS
+    public abstract class IntegrationListener
+    {
+        public abstract void onSessionReady(string dashboardSessionUrl);
+        public abstract void onVisitorReady(string dashboardVisitorUrl);
+    }
+#endif
+
 
     public class SetupOptionsBuilder
     {
@@ -286,8 +297,7 @@ namespace SmartlookUnity
 
 #if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                //TODO : implementation
-                return "";
+                return GetDashboardVisitorUrlInternalIOS();
             }
 #endif
             return "";
@@ -338,7 +348,7 @@ namespace SmartlookUnity
 
 #if UNITY_IOS
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
-                //TODO : implementation
+                RegisterIntegrationListenerInternalIOS(integrationListener);
             }
 #endif
         }
