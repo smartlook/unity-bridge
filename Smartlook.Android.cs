@@ -180,41 +180,20 @@ namespace SmartlookUnity
             }
         }
 
-static partial void SetUserIdentifierInternal(string userIdentifier) {
-      if (Application.platform == RuntimePlatform.Android) {
-        getSLClass().CallStatic("setUserIdentifier", userIdentifier);
-      }
-    }
-
-    static partial void SetUserIdentifierInternal(string userIdentifier, string properties) {
-      if (Application.platform == RuntimePlatform.Android) {
+        static partial void SetUserIdentifierInternal(string userIdentifier)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
                 getSLClass().CallStatic("setUserIdentifier", userIdentifier);
-                getSLClass().CallStatic("setUserProperties", properties, false);
-      }
-    }
-    
-        
-    static partial void StopTimedCustomEventInternal(string eventId) {
-        if (Application.platform == RuntimePlatform.Android) {
-          getSLClass().CallStatic("stopTimedCustomEvent", eventId);
+            }
         }
-    }
-
-    static partial void StopTimedCustomEventInternal(string eventId, string properties) {
-        if (Application.platform == RuntimePlatform.Android) {
-          getSLClass().CallStatic("stopTimedCustomEvent", eventId, properties);
-        }
-    }
-
-    static partial void CancelTimedCustomEventInternal(string eventId, string reason) {
-        if (Application.platform == RuntimePlatform.Android) {
-          getSLClass().CallStatic("cancelTimedCustomEvent", eventId, reason);
 
         static partial void SetUserIdentifierInternal(string userIdentifier, string properties)
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                getSLClass().CallStatic("setUserIdentifier", userIdentifier, properties);
+                getSLClass().CallStatic("setUserIdentifier", userIdentifier);
+                getSLClass().CallStatic("setUserProperties", properties, false);
             }
         }
 
