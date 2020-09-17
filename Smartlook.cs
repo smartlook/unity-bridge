@@ -109,7 +109,7 @@ namespace SmartlookUnity
 
         /// Setup Smartlook and start recording with custom setup options.
         /// <param name="setupOptions">Instance of SetupOptions class.</param>
-        [SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")]
+        [SL_COMPATIBILITY_NAME("name=setupAndStartRecording;type=func;params=setupOptions{SetupOptions}")]
         public static void SetupAndStartRecording(SetupOptions setupOptions) { SetupAndStartRecordingInternal(setupOptions); }
 
         /// Setup Smartlook. This method initializes Smartlook SDK, but does not start recording. To start recording, call StartRecording() method.
