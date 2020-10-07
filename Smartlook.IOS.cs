@@ -174,16 +174,16 @@ namespace SmartlookUnity {
             return null;
         }
 
-		[DllImport("__Internal")]
-		static extern string SmartlookGetDashboardVisitorUrl();
+        [DllImport("__Internal")]
+        static extern string SmartlookGetDashboardVisitorUrl();
 
-		public static string GetDashboardVisitorUrlInternalIOS() {
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				return SmartlookGetDashboardVisitorUrl();
-			}
+        public static string GetDashboardVisitorUrlInternalIOS() {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                return SmartlookGetDashboardVisitorUrl();
+            }
 
-			return null;
-		}
+            return null;
+        }
 
         [DllImport("__Internal")]
         static extern void SmartlookEnableCrashlytics(bool enable);
@@ -290,7 +290,7 @@ namespace SmartlookUnity {
 
         [DllImport("__Internal")]
         static extern void SmartlookResetSession(bool resetUser);
-		
+        
         static partial void ResetSessionInternal(bool resetUser) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 SmartlookResetSession(resetUser);
@@ -303,6 +303,26 @@ namespace SmartlookUnity {
         static partial void SetRenderingModeInternal(int renderingMode) {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 SmartlookSetRenderingMode(renderingMode);
+            }
+        }
+
+        [DllImport("__Internal")]
+        static extern void SmartlookSetEventTrackingMode(string eventTrackingMode);
+
+        static partial void SetEventTrackingModeInternal(string eventTrackingMode)
+        {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                SmartlookSetEventTrackingMode(eventTrackingMode);
+            }
+        }
+
+        [DllImport("__Internal")]
+        static extern void SmartlookSetEventTrackingModes(string eventTrackingModes);
+
+        static partial void SetEventTrackingModesInternal(string eventTrackingModes)
+        {
+            if (Application.platform == RuntimePlatform.IPhonePlayer) {
+                SmartlookSetEventTrackingModes(eventTrackingModes);
             }
         }
         
@@ -329,7 +349,7 @@ namespace SmartlookUnity {
             if (Application.platform == RuntimePlatform.IPhonePlayer) {
                 privateIntegrationListener = integrationListener;
 
-				SmartlookSetDashboardSessionUrlListener(delegateSessionUrlChanged);
+                SmartlookSetDashboardSessionUrlListener(delegateSessionUrlChanged);
                 SmartlookSetDashboardVisitorUrlListener(delegateVisitorUrlChanged);
             }
         }

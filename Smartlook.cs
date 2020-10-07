@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace SmartlookUnity
 {
@@ -92,9 +94,16 @@ namespace SmartlookUnity
 
     public static partial class Smartlook
     {
-
         public enum NavigationEventType { enter = 0, exit = 1 }
         public enum RenderingModeType { native = 0, no_rendering = 1 }
+        [Serializable]
+        public enum EventTrackingMode { FULL_TRACKING, IGNORE_USER_INTERACTION, IGNORE_NAVIGATION_INTERACTION, IGNORE_RAGE_CLICKS, NO_TRACKING }
+
+        [Serializable]
+        public class TrackingEventsWrapper
+        {
+            public List<string> eventTrackingModes;
+        }
 
         /// Setup Smartlook and start recording.
         /// <param name="key">The application (project) specific SDK key, available in your Smartlook dashboard.</param>
@@ -271,6 +280,24 @@ namespace SmartlookUnity
         [SL_COMPATIBILITY_NAME("name=setRenderingMode;type=func;params=renderingMode{RenderingMode}")]
         public static void SetRenderingMode(RenderingModeType renderingMode) { SetRenderingModeInternal((int)renderingMode); }
 
+        /// By changing rendering mode you can adjust the way we render the application for recordings.
+        /// <param name="eventTrackingMode">Desired tracking mode.</param>
+        [SL_COMPATIBILITY_NAME("name=setEventTrackingMode;type=func;params=eventTrackingMode{EventTrackingMode}")]
+        public static void setEventTrackingMode(EventTrackingMode eventTrackingMode) { SetEventTrackingModeInternal(eventTrackingMode.ToString()); }
+
+        /// By changing rendering mode you can adjust the way we render the application for recordings.
+        /// <param name="eventTrackingModes">Desired tracking modes.</param>
+        [SL_COMPATIBILITY_NAME("name=setEventTrackingModes;type=func;params=eventTrackingModes{List[EventTrackingMode]}")]
+        public static void setEventTrackingModes(List<EventTrackingMode> eventTrackingModes) { SetEventTrackingModesInternal(handleEventModes(eventTrackingModes)); }
+
+        private static string handleEventModes(List<EventTrackingMode> modes)
+        {
+            SmartlookUnity.Smartlook.TrackingEventsWrapper wrapper = new SmartlookUnity.Smartlook.TrackingEventsWrapper() { eventTrackingModes = modes.ConvertAll(mode => mode.ToString()) };
+            string input = JsonUtility.ToJson(wrapper);
+            string array = "[" + input.Split('[')[1].Split(']')[0] + "]";
+            return array;
+        }
+
         /// Set the app's user identifier.
         /// <param name="userIdentifier">The application-specific user identifier.</param>
         [SL_COMPATIBILITY_NAME("name=setUserIdentifier;type=func;params=identifier{string}")]
@@ -322,6 +349,8 @@ namespace SmartlookUnity
         static partial void CancelTimedCustomEventInternal(string eventId, string reason, string properties);
         static partial void ResetSessionInternal(bool resetUser);
         static partial void SetRenderingModeInternal(int renderingMode);
+        static partial void SetEventTrackingModeInternal(string eventTrackingMode);
+        static partial void SetEventTrackingModesInternal(string eventTrackingModes);
         static partial void UnregisterIntegrationListenerInternal();
 
 
