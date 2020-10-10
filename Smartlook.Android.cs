@@ -244,6 +244,22 @@ namespace SmartlookUnity
             }
         }
 
+        static partial void SetEventTrackingModeInternal(string eventTrackingMode)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("setEventTrackingMode", eventTrackingMode);
+            }
+        }
+
+        static partial void SetEventTrackingModesInternal(string eventTrackingModes)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("setEventTrackingModes", eventTrackingModes);
+            }
+        }
+
         static partial void UnregisterIntegrationListenerInternal()
         {
             if (Application.platform == RuntimePlatform.Android)
