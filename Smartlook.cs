@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SmartlookUnity
 {
@@ -10,7 +11,7 @@ namespace SmartlookUnity
     [SL_COMPATIBILITY_NAME("name=IntegrationListener;type=callback;members=onSessionReady,onVisitorReady")]
     public abstract class IntegrationListener : AndroidJavaProxy
     {
-        public IntegrationListener() : base("com.smartlook.sdk.smartlook.IntegrationListener") { }
+        public IntegrationListener() : base("com.smartlook.sdk.smartlook.integration.IntegrationListener") { }
 
         public abstract void onSessionReady(string dashboardSessionUrl);
         public abstract void onVisitorReady(string dashboardVisitorUrl);
@@ -98,11 +99,76 @@ namespace SmartlookUnity
         public enum RenderingModeType { native = 0, no_rendering = 1 }
         [Serializable]
         public enum EventTrackingMode { FULL_TRACKING, IGNORE_USER_INTERACTION, IGNORE_NAVIGATION_INTERACTION, IGNORE_RAGE_CLICKS, NO_TRACKING }
+        public enum LogAspect { REST, SDK_METHODS, VIDEO_CAPTURE, LIFECYCLE }
+        public enum RecordingMaskElementType { SOLID, CUT }
 
         [Serializable]
         public class TrackingEventsWrapper
         {
             public List<string> eventTrackingModes;
+        }
+
+        [Serializable]
+        public class DebugAspectsWrapper
+        {
+            public List<string> debugAspects;
+        }
+
+        public class RecordingMaskElement
+        {
+            [SerializeField] public Rect rect;
+            [SerializeField] public RecordingMaskElementType type;
+        }
+
+        [Serializable]
+        public class InternalRecordingMaskElement
+        {
+            [SerializeField] public InternalRect rect;
+            [SerializeField] public RecordingMaskElementType type;
+        }
+
+        [Serializable]
+        public class InternalRect
+        {
+            [SerializeField] public int left;
+            [SerializeField] public int top;
+            [SerializeField] public int right;
+            [SerializeField] public int bottom;
+        }
+
+        [Serializable]
+        public class RecordingMaskWrapper
+        {
+            public List<string> elements;
+        }
+
+        public static class JsonHelper
+        {
+            public static T[] FromJson<T>(string json)
+            {
+                Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+                return wrapper.Items;
+            }
+
+            public static string ToJson<T>(T[] array)
+            {
+                Wrapper<T> wrapper = new Wrapper<T>();
+                wrapper.Items = array;
+                return JsonUtility.ToJson(wrapper);
+            }
+
+            public static string ToJson<T>(T[] array, bool prettyPrint)
+            {
+                Wrapper<T> wrapper = new Wrapper<T>();
+                wrapper.Items = array;
+                return JsonUtility.ToJson(wrapper, prettyPrint);
+            }
+
+            [Serializable]
+            private class Wrapper<T>
+            {
+                public T[] Items;
+            }
         }
 
         /// Setup Smartlook and start recording.
@@ -298,6 +364,33 @@ namespace SmartlookUnity
             return array;
         }
 
+        [SL_COMPATIBILITY_NAME("name=debugLoggingAspects;type=func;params=eventTrackingModes{List[LogAspect]}")]
+        public static void enableLogging(List<LogAspect> debugAspects) { SetDebugLoggingAspectsInternal(handleDebugAspects(debugAspects)); }
+
+        private static string handleDebugAspects(List<LogAspect> logAspects)
+        {
+            SmartlookUnity.Smartlook.DebugAspectsWrapper wrapper = new SmartlookUnity.Smartlook.DebugAspectsWrapper() { debugAspects = logAspects.ConvertAll(mode => mode.ToString()) };
+            string input = JsonUtility.ToJson(wrapper);
+            string array = "[" + input.Split('[')[1].Split(']')[0] + "]";
+            return array;
+        }
+
+        public static void SetRecordingMask(List<RecordingMaskElement> maskElements) { SetRecordingMaskInternal(handleRecordingMasks(maskElements)); }
+
+        private static string handleRecordingMasks(List<RecordingMaskElement> sensitiveRects)
+        {
+            List<InternalRecordingMaskElement> internalSensitiveRects = new List<InternalRecordingMaskElement>();
+            sensitiveRects.ForEach(mask => {
+                internalSensitiveRects.Add(new InternalRecordingMaskElement() { rect = new InternalRect() { left = (int)mask.rect.xMin, top = (int)mask.rect.yMax, right = (int)mask.rect.xMax, bottom = (int)mask.rect.yMin, }, type = mask.type });
+            });
+
+            SmartlookUnity.Smartlook.RecordingMaskWrapper wrapper = new SmartlookUnity.Smartlook.RecordingMaskWrapper() { elements = internalSensitiveRects.ConvertAll(mask => JsonUtility.ToJson(mask)) };
+            string input = JsonUtility.ToJson(wrapper);
+            string array = "[" + input.Split('[')[1].Split(']')[0] + "]";
+            Debug.Log(array);
+            return array;
+        }
+
         /// Set the app's user identifier.
         /// <param name="userIdentifier">The application-specific user identifier.</param>
         [SL_COMPATIBILITY_NAME("name=setUserIdentifier;type=func;params=identifier{string}")]
@@ -351,7 +444,9 @@ namespace SmartlookUnity
         static partial void SetRenderingModeInternal(int renderingMode);
         static partial void SetEventTrackingModeInternal(string eventTrackingMode);
         static partial void SetEventTrackingModesInternal(string eventTrackingModes);
+        static partial void SetDebugLoggingAspectsInternal(string debugAspects);
         static partial void UnregisterIntegrationListenerInternal();
+        static partial void SetRecordingMaskInternal(string recordingMasks);
 
 
         public static bool IsRecordingInternal()

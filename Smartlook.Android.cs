@@ -260,6 +260,23 @@ namespace SmartlookUnity
             }
         }
 
+        static partial void SetDebugLoggingAspectsInternal(string debugAspects)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("enableLogging", debugAspects);
+            }
+        }
+
+        static partial void SetRecordingMaskInternal(string recordingMasks)
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                Debug.Log("FUCKK after setup : " + recordingMasks);
+                getSLClass().CallStatic("setRecordingMask", recordingMasks);
+            }
+        }
+
         static partial void UnregisterIntegrationListenerInternal()
         {
             if (Application.platform == RuntimePlatform.Android)
