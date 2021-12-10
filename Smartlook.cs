@@ -320,6 +320,15 @@ namespace SmartlookUnity
         [SL_COMPATIBILITY_NAME("name=unregisterIntegrationListener;type=func")]
         public static void UnregisterIntegrationListener() { UnregisterIntegrationListenerInternal(); }
 
+        public static void EnableLogging()
+        {
+#if UNITY_ANDROID
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                getSLClass().CallStatic("enableLogging", "[ALL]");
+            }
+#endif
+        }
 
         // Internal
         static partial void SetupAndStartRecordingInternal(string key);
