@@ -40,7 +40,7 @@ namespace SmartlookUnity
     public class SetupOptionsBuilder
     {
         protected string ApiKey { get; set; }
-        protected int Fps { get; set; };
+        protected int Fps { get; set; }
         protected bool StartNewSession { get; set; } = false;
         protected bool StartNewSessionAndUser { get; set; } = false;
 
